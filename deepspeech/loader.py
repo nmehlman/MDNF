@@ -5,7 +5,7 @@ Model contributed by: MITRE Corporation
 
 from typing import Optional
 
-from art.estimators.speech_recognition import PyTorchDeepSpeech
+from pytorch_deepspeech import PyTorchDeepSpeech
 
 from armory.utils.external_repo import ExternalRepoImport
 
