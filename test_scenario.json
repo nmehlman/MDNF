@@ -42,18 +42,17 @@
             "nb_epochs": 20000
         },
         "model_kwargs": {},
-        "module": "armory.baseline_models.pytorch.deep_speech",
-        "name": "get_art_model",
+        "module": "deepspeech.loader",
+        "name": "get_deepspeech_model",
         "predict_kwargs": {
             "transcription_output": true
         },
-        "weights_file":null,
+        "weights_file": "/work_new/asreeram/models/30-70-clean-melgan-WGN-ftASR.ckpt",
         "wrapper_kwargs": {
             "clip_values": [
                 -1,
                 1
-            ],
-            "filename": "/work_new/asreeram/models/30-70-clean-melgan-WGN-ftASR.ckpt"
+            ]
         }
     },
     "scenario": {
