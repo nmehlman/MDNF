@@ -47,13 +47,12 @@
         "predict_kwargs": {
             "transcription_output": true
         },
-        "weights_file": null,
+        "weights_file": "/work_new/asreeram/models/30-70-clean-melgan-WGN-ftASR.ckpt",
         "wrapper_kwargs": {
             "clip_values": [
                 -1,
                 1
-            ],
-            "pretrained_model": "librispeech"
+            ]
         }
     },
     "scenario": {
