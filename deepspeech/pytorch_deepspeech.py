@@ -256,6 +256,8 @@ class PyTorchDeepSpeech(PytorchSpeechRecognizerMixin, SpeechRecognizerMixin, PyT
                 )
 
                 # Then load model
+                import pdb
+                pdb.set_trace()
                 self._model = load_model(device=self._device, model_path=model_path)
 
         else:
