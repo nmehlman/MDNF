@@ -20,5 +20,5 @@ with ExternalRepoImport(
 def get_deepspeech_model(
     model_kwargs: dict, wrapper_kwargs: dict, weights_path: Optional[str] = None
 ) -> PyTorchDeepSpeech:
-    wrapper_kwargs['filename'] = weights_path
+
     return PyTorchDeepSpeech(**wrapper_kwargs)
