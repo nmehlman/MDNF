@@ -1,4 +1,4 @@
-from sail.mel2wav.modules import Generator, Audio2Mel
+from mdnf.mel2wav.modules import Generator, Audio2Mel
 
 from pathlib import Path
 import yaml
