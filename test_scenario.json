@@ -47,7 +47,7 @@
         "predict_kwargs": {
             "transcription_output": true
         },
-        "weights_file": "30_70_weights.ckpt",
+        "weights_file": null,
         "wrapper_kwargs": {
             "clip_values": [
                 -1,
