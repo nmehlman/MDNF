@@ -7,21 +7,23 @@
         "knowledge": "white",
         "kwargs": {
             "batch_size": 1,
-            "eps": 20,
-            "eps_step": 0.5,
-            "max_iter": 500,
-            "norm": "snr",
+            "eps": 1.5,
+            "eps_step": 0.3,
+            "max_iter": 100,
+            "norm": 2,
             "num_random_init": 0,
-            "targeted": false
+            "random_eps": false,
+            "targeted": false,
+            "verbose": false
         },
-        "module": "armory.art_experimental.attacks.snr_pgd",
-        "name": "SNR_PGD_Numpy",
+        "module": "art.attacks.evasion",
+        "name": "ProjectedGradientDescent",
         "targeted": false,
         "use_label": false
     },
     "dataset": {
         "batch_size": 1,
-        "eval_split": "test_clean",
+        "eval_split": "dev_clean",
         "framework": "numpy",
         "module": "armory.data.datasets",
         "name": "librispeech",
@@ -74,6 +76,7 @@
         "external_github_repo": "SeanNaren/deepspeech.pytorch@V3.0",
         "gpus": "all",
         "local_repo_path": null,
+        "num_eval_batches": 500,
         "output_dir": null,
         "output_filename": null,
         "use_gpu": false
