@@ -34,7 +34,7 @@ import pickle
 
 from art.defences.preprocessor.preprocessor import PreprocessorPyTorch, Preprocessor
 import torch
-from mdnf.mel2wav.vocoder import MelVocoder
+from mdnf.mel2wav.interface import MelVocoder
 
 from os.path import join
 
