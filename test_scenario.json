@@ -52,7 +52,7 @@
             "nb_epochs": 20000
         },
         "model_kwargs": {},
-        "module": "deepspeech.loader",
+        "module": "mndf.deepspeech.loader",
         "name": "get_deepspeech_model",
         "predict_kwargs": {
             "transcription_output": true
