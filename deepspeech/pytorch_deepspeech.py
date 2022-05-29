@@ -60,6 +60,7 @@ class PyTorchDeepSpeech(PytorchSpeechRecognizerMixin, SpeechRecognizerMixin, PyT
         model: Optional["DeepSpeech"] = None,
         pretrained_model: Optional[str] = None,
         filename: Optional[str] = None,
+        local_weights_file: Optional[str] = None,
         url: Optional[str] = None,
         use_half: bool = False,
         optimizer: Optional["torch.optim.Optimizer"] = None,  # type: ignore
@@ -177,90 +178,90 @@ class PyTorchDeepSpeech(PytorchSpeechRecognizerMixin, SpeechRecognizerMixin, PyT
 
         # Load model
         if model is None:
-            if self._version == 2:
-                if pretrained_model == "an4":  # pragma: no cover
-                    filename, url = (
-                        "an4_pretrained_v2.pth",
-                        "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/v2.0/an4_pretrained_v2.pth",
-                    )
+            if local_weights_file: # Local locally stored weights file
+                self._model = load_model(device=self._device, model_path=local_weights_file)
+            else:
+                if self._version == 2:
+                    if pretrained_model == "an4":  # pragma: no cover
+                        filename, url = (
+                            "an4_pretrained_v2.pth",
+                            "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/v2.0/an4_pretrained_v2.pth",
+                        )
 
-                elif pretrained_model == "librispeech":
-                    filename, url = (
-                        "librispeech_pretrained_v2.pth",
-                        "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/v2.0/"
-                        "librispeech_pretrained_v2.pth",
-                    )
-
-                elif pretrained_model == "tedlium":  # pragma: no cover
-                    filename, url = (
-                        "ted_pretrained_v2.pth",
-                        "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/v2.0/ted_pretrained_v2.pth",
-                    )
-
-                elif pretrained_model is None:  # pragma: no cover
-                    # If model is None and no pretrained model is selected, then we need to have parameters filename
-                    # and url to download, extract and load the automatic speech recognition model
-                    if filename is None or url is None:
+                    elif pretrained_model == "librispeech":
                         filename, url = (
                             "librispeech_pretrained_v2.pth",
                             "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/v2.0/"
                             "librispeech_pretrained_v2.pth",
                         )
 
-                else:  # pragma: no cover
-                    raise ValueError(f"The input pretrained model {pretrained_model} is not supported.")
+                    elif pretrained_model == "tedlium":  # pragma: no cover
+                        filename, url = (
+                            "ted_pretrained_v2.pth",
+                            "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/v2.0/ted_pretrained_v2.pth",
+                        )
 
-                # Download model
-                model_path = get_file(
-                    filename=filename, path=config.ART_DATA_PATH, url=url, extract=False, verbose=self.verbose
-                )
+                    elif pretrained_model is None:  # pragma: no cover
+                        # If model is None and no pretrained model is selected, then we need to have parameters filename
+                        # and url to download, extract and load the automatic speech recognition model
+                        if filename is None or url is None:
+                            filename, url = (
+                                "librispeech_pretrained_v2.pth",
+                                "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/v2.0/"
+                                "librispeech_pretrained_v2.pth",
+                            )
 
-                # Then load model
-                self._model = load_model(device=self._device, model_path=model_path, use_half=use_half)
+                    else:  # pragma: no cover
+                        raise ValueError(f"The input pretrained model {pretrained_model} is not supported.")
 
-            else:
-                if pretrained_model == "an4":  # pragma: no cover
-                    filename, url = (
-                        "an4_pretrained_v3.ckpt",
-                        "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/V3.0/an4_pretrained_v3.ckpt",
+                    # Download model
+                    model_path = get_file(
+                        filename=filename, path=config.ART_DATA_PATH, url=url, extract=False, verbose=self.verbose
                     )
 
-                elif pretrained_model == "librispeech":
-                    filename, url = (
-                        "librispeech_pretrained_v3.ckpt",
-                        "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/V3.0/"
-                        "librispeech_pretrained_v3.ckpt",
-                    )
+                    # Then load model
+                    self._model = load_model(device=self._device, model_path=model_path, use_half=use_half)
 
-                elif pretrained_model == "tedlium":  # pragma: no cover
-                    filename, url = (
-                        "ted_pretrained_v3.ckpt",
-                        "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/V3.0/ted_pretrained_v3.ckpt",
-                    )
+                else:
+                    if pretrained_model == "an4":  # pragma: no cover
+                        filename, url = (
+                            "an4_pretrained_v3.ckpt",
+                            "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/V3.0/an4_pretrained_v3.ckpt",
+                        )
 
-                elif pretrained_model is None:  # pragma: no cover
-                    # If model is None and no pretrained model is selected, then we need to have parameters filename and
-                    # url to download, extract and load the automatic speech recognition model
-                    if filename is None and url is None:
+                    elif pretrained_model == "librispeech":
                         filename, url = (
                             "librispeech_pretrained_v3.ckpt",
                             "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/V3.0/"
                             "librispeech_pretrained_v3.ckpt",
                         )
 
-                else:  # pragma: no cover
-                    raise ValueError(f"The input pretrained model {pretrained_model} is not supported.")
+                    elif pretrained_model == "tedlium":  # pragma: no cover
+                        filename, url = (
+                            "ted_pretrained_v3.ckpt",
+                            "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/V3.0/ted_pretrained_v3.ckpt",
+                        )
 
-                # Download model
-                model_path = get_file(
-                    filename=filename, path=config.ART_DATA_PATH, url=url, extract=False, verbose=self.verbose
-                )
+                    elif pretrained_model is None:  # pragma: no cover
+                        # If model is None and no pretrained model is selected, then we need to have parameters filename and
+                        # url to download, extract and load the automatic speech recognition model
+                        if filename is None or url is None:
+                            filename, url = (
+                                "librispeech_pretrained_v3.ckpt",
+                                "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/V3.0/"
+                                "librispeech_pretrained_v3.ckpt",
+                            )
 
-                # Then load model
-                import pdb
-                pdb.set_trace()
-                self._model = load_model(device=self._device, model_path=model_path)
+                    else:  # pragma: no cover
+                        raise ValueError(f"The input pretrained model {pretrained_model} is not supported.")
 
+                    # Download model
+                    model_path = get_file(
+                        filename=filename, path=config.ART_DATA_PATH, url=url, extract=False, verbose=self.verbose
+                    )
+
+                    # Then load model
+                    self._model = load_model(device=self._device, model_path=model_path)
         else:
             self._model = model
 
