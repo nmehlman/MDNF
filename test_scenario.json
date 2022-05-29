@@ -30,10 +30,7 @@
     "defense": {
         "kwargs": {
             "nf_level": 20,
-            "nf_curve_file": "/work_new/nmehlman/GARD_code/PyTorchPreprocessorClasses/exact_smoothing_curve",
-            "apply_fit": false,
-            "apply_predict": true,
-            "verbose": false
+            "nf_curve_file": "/work_new/nmehlman/GARD_code/PyTorchPreprocessorClasses/exact_smoothing_curve"
         },
         "module": "MDNF",
         "name": "MDNF_Torch",
