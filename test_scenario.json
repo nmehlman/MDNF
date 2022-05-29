@@ -34,7 +34,7 @@
             "nf_level": 20,
             "nf_curve_file": "/work_new/nmehlman/GARD_code/PyTorchPreprocessorClasses/exact_smoothing_curve"
         },
-        "module": "MDNF",
+        "module": "mdnf.MDNF_preprocessor",
         "name": "MDNF_Torch",
         "type": "Preprocessor"
     },
