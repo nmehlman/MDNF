@@ -127,8 +127,7 @@ class PyTorchDeepSpeech(PytorchSpeechRecognizerMixin, SpeechRecognizerMixin, PyT
         :param device_type: Type of device to be used for model and tensors, if `cpu` run on CPU, if `gpu` run on GPU
                             if available otherwise run on CPU.
         """
-        import pdb
-        pdb.set_trace()
+      
         import torch  # lgtm [py/repeated-import]
         from deepspeech_pytorch.model import DeepSpeech
         from deepspeech_pytorch.configs.inference_config import LMConfig
