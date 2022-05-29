@@ -49,11 +49,11 @@
         },
         "weights_file": null,
         "wrapper_kwargs": {
+            "local_weights_file": "/work_new/asreeram/models/30-70-clean-melgan-WGN-ftASR.ckpt",
             "clip_values": [
                 -1,
                 1
-            ],
-            "filename": "30_70_weights.ckpt"
+            ]
         }
     },
     "scenario": {
