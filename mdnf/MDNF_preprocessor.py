@@ -40,10 +40,6 @@ from os.path import join
 
 logger = logging.getLogger(__name__)
 
-class modelArgs:
-    def __init__(self, path):
-        self.model_path = path
-
 class MDNF_Torch(PreprocessorPyTorch):
     
     """
@@ -52,6 +48,7 @@ class MDNF_Torch(PreprocessorPyTorch):
 
     def __init__(
         self,
+        mg_weights_path,
         nf_level = 0,
         nf_curve_file = None,
         apply_fit: bool = False,
@@ -73,7 +70,7 @@ class MDNF_Torch(PreprocessorPyTorch):
         self.resample1 = torchaudio.transforms.Resample(16000, 22000)
         self.resample2 = torchaudio.transforms.Resample(22000, 16000)
 
-        self.mel_GAN = MelVocoder(path = "", github=True, model_name="multi_speaker")
+        self.mel_GAN = MelVocoder(path=mg_weights_path, device=self.device)
 
     def forward(self, x: "torch.Tensor", y: Optional["torch.Tensor"] = None) -> Tuple["torch.Tensor", Optional["torch.Tensor"]]:
 
