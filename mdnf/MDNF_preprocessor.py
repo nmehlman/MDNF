@@ -23,7 +23,6 @@ This module implements the MDNF defence as a PreprocessorPyTorch subclass.
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
-from audio_export_wrapper import audio_export
 from typing import Optional, Tuple
 
 import numpy as np
