@@ -242,7 +242,7 @@ class PyTorchDeepSpeech(PytorchSpeechRecognizerMixin, SpeechRecognizerMixin, PyT
                 elif pretrained_model is None:  # pragma: no cover
                     # If model is None and no pretrained model is selected, then we need to have parameters filename and
                     # url to download, extract and load the automatic speech recognition model
-                    if filename is None or url is None:
+                    if filename is None and url is None:
                         filename, url = (
                             "librispeech_pretrained_v3.ckpt",
                             "https://github.com/SeanNaren/deepspeech.pytorch/releases/download/V3.0/"
