@@ -32,7 +32,7 @@
     "defense": {
         "kwargs": {
             "nf_level": 20,
-            "nf_curve_file": "weights/smoothing_curve"
+            "nf_curve_file": "/work_new/nmehlman/MDNF/mdnf/weights/smoothing_curve"
         },
         "module": "mdnf.MDNF_preprocessor",
         "name": "MDNF_Torch",
