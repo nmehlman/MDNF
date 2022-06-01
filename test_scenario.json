@@ -31,9 +31,7 @@
     },
     "defense": {
         "kwargs": {
-            "mg_weights_path": "/work_new/nmehlman/MDNF/mdnf/weights/melGAN.pt",
-            "nf_level": 20,
-            "nf_curve_file": "/work_new/nmehlman/MDNF/mdnf/weights/smoothing_curve"
+            "nf_level": 20
         },
         "module": "mdnf.MDNF_preprocessor",
         "name": "MDNF_Torch",
