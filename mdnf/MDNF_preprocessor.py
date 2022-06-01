@@ -79,7 +79,7 @@ class MDNF_Torch(PreprocessorPyTorch):
         self.resample1 = torchaudio.transforms.Resample(16000, 22000)
         self.resample2 = torchaudio.transforms.Resample(22000, 16000)
 
-        mg_weights_path = os.path.join(LOCAL_WEIGHTS_DIR, nf_curve_file)
+        mg_weights_path = os.path.join(LOCAL_WEIGHTS_DIR, mg_weights_file)
         try:
             self.mel_GAN = MelVocoder(path=mg_weights_path, device=self.device)
         except FileNotFoundError:
