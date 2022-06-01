@@ -1,4 +1,4 @@
-name: gard_test
+name: mdnf
 channels:
   - defaults
 dependencies:
