@@ -42,7 +42,7 @@ from os.path import join
 
 logger = logging.getLogger(__name__)
 
-LOCAL_WEIGHTS_DIR = globals()["__file__"].replace("melGAN_pytorch.py", "weights") # Need for imports of weights/smoothing files
+LOCAL_WEIGHTS_DIR = globals()["__file__"].replace("MDNF_preprocessor.py", "weights") # Need for imports of weights/smoothing files
 
 class MDNF_Torch(PreprocessorPyTorch):
     
