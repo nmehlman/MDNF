@@ -31,26 +31,30 @@ import pdb
 import torchaudio
 from math import log10
 import pickle
+import os
 
 from art.defences.preprocessor.preprocessor import PreprocessorPyTorch, Preprocessor
 import torch
 from mdnf.mel2wav.interface import MelVocoder
+import sys
 
 from os.path import join
 
 logger = logging.getLogger(__name__)
 
+LOCAL_WEIGHTS_DIR = globals()["__file__"].replace("melGAN_pytorch.py", "weights") # Need for imports of weights/smoothing files
+
 class MDNF_Torch(PreprocessorPyTorch):
     
     """
-    Implements the melGAN defense.
+    Implements the MDNF defense.
     """
 
     def __init__(
         self,
-        mg_weights_path,
+        mg_weights_file = 'melGAN.pt',
         nf_level = 0,
-        nf_curve_file = None,
+        nf_curve_file = 'smoothing_curve',
         apply_fit: bool = False,
         apply_predict: bool = True,
     ) -> None:
@@ -65,12 +69,22 @@ class MDNF_Torch(PreprocessorPyTorch):
         self.nf_level = nf_level
         self.informed_smoothing = bool(nf_curve_file)
         if nf_curve_file:
-            self.smoothing_curve = pickle.load(open(nf_curve_file, 'rb')).to(self.device)
+            nf_curve_path = os.path.join(LOCAL_WEIGHTS_DIR, nf_curve_file)
+            try:
+                self.smoothing_curve = pickle.load(open(nf_curve_path, 'rb')).to(self.device)
+            except FileNotFoundError:
+                print("Smoothing curve file not found. Ensure that the file is located in the 'mdnf/weights' directory")
+                sys.exit(1)
 
         self.resample1 = torchaudio.transforms.Resample(16000, 22000)
         self.resample2 = torchaudio.transforms.Resample(22000, 16000)
 
-        self.mel_GAN = MelVocoder(path=mg_weights_path, device=self.device)
+        mg_weights_path = os.path.join(LOCAL_WEIGHTS_DIR, nf_curve_file)
+        try:
+            self.mel_GAN = MelVocoder(path=mg_weights_path, device=self.device)
+        except FileNotFoundError:
+            print("MelGAN weights file not found. Ensure that the file is located in the 'mdnf/weights' directory")
+            sys.exit(1)
 
     def forward(self, x: "torch.Tensor", y: Optional["torch.Tensor"] = None) -> Tuple["torch.Tensor", Optional["torch.Tensor"]]:
 
