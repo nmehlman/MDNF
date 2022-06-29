@@ -91,7 +91,7 @@ class MDNF_Torch(PreprocessorPyTorch):
             n = torch.randn(mels.size()).to(self.device)
             if self.informed_smoothing:
                 n = n * self.smoothing_curve
-            n = n/torch.norm(n)  # Normalize by energy
+            frame_energy = torch.sqrt( torch.diagonal( n @ torch.transpose(n, 1, 2), 1, 2) )
             mels = mels + self.nf_level*n
 
         x = self.mel_GAN.inverse(mels)
