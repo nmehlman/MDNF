@@ -91,9 +91,13 @@ class MDNF_Torch(PreprocessorPyTorch):
             n = torch.randn(mels.size()).to(self.device)
             if self.informed_smoothing:
                 n = n * self.smoothing_curve
-            frame_energy = torch.sqrt( torch.diagonal( n @ torch.transpose(n, 1, 2), 1, 2) ) # Compute energy of each frame
-            pdb.set_trace()
-            mels = mels + self.nf_level*n
+            
+            ## Fame-based normalization ##
+            frame_energy = torch.norm(n, 2, dim=1).squeeze() # Compute energy of each frame
+            n = n * 1/frame_energy # Normalize
+            ##  ##  ##  ##  ##  ##  ##  ##
+            
+            mels = mels + self.nf_level * n
 
         x = self.mel_GAN.inverse(mels)
         x = torchaudio.functional.resample(x, 22000, 16000)
