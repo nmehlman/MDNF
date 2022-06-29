@@ -59,7 +59,7 @@ class MDNF_Torch(PreprocessorPyTorch):
         apply_predict: bool = True,
     ) -> None:
 
-        """Create an instance of the perceptual denoiser."""
+        """Create an instance of the MDNf Defense"""
 
         super().__init__(is_fitted=True, apply_fit=apply_fit, apply_predict=apply_predict)
         
@@ -76,9 +76,6 @@ class MDNF_Torch(PreprocessorPyTorch):
                 print("Smoothing curve file not found. Ensure that the file is located in the 'mdnf/weights' directory")
                 sys.exit(1)
 
-        self.resample1 = torchaudio.transforms.Resample(16000, 22000)
-        self.resample2 = torchaudio.transforms.Resample(22000, 16000)
-
         mg_weights_path = os.path.join(LOCAL_WEIGHTS_DIR, mg_weights_file)
         try:
             self.mel_GAN = MelVocoder(path=mg_weights_path, device=self.device)
@@ -88,7 +85,7 @@ class MDNF_Torch(PreprocessorPyTorch):
 
     def forward(self, x: "torch.Tensor", y: Optional["torch.Tensor"] = None) -> Tuple["torch.Tensor", Optional["torch.Tensor"]]:
 
-        x = self.resample1(x)
+        x = torchaudio.functional.resample(x, 16000, 22000)
         mels = self.mel_GAN(x)
         if self.nf_level:
             n = torch.randn(mels.size()).to(self.device)
@@ -98,6 +95,6 @@ class MDNF_Torch(PreprocessorPyTorch):
             mels = mels + self.nf_level*n
 
         x = self.mel_GAN.inverse(mels)
-        x = self.resample2(x)
+        x = torchaudio.functional.resample(x, 22000, 16000)
         
         return x, y
