@@ -93,8 +93,9 @@ class MDNF_Torch(PreprocessorPyTorch):
                 n = n * self.smoothing_curve
             
             ## Fame-based normalization ##
-            frame_energy = torch.norm(n, 2, dim=1).squeeze() # Compute energy of each frame
-            n = n * 1/frame_energy # Normalize
+            noise_frame_energy = torch.norm(n, 2, dim=1).squeeze() # Compute energy of each frame
+            mels_frame_energy = torch.norm(mels, 2, dim=1).squeeze() # Compute energy of each frame
+            n = n * mels_frame_energy/noise_frame_energy # Normalize
             ##  ##  ##  ##  ##  ##  ##  ##
             
             mels = mels + self.nf_level * n
