@@ -86,21 +86,25 @@ class MDNF_Torch(PreprocessorPyTorch):
     def forward(self, x: "torch.Tensor", y: Optional["torch.Tensor"] = None) -> Tuple["torch.Tensor", Optional["torch.Tensor"]]:
 
         x = torchaudio.functional.resample(x, 16000, 22000)
-        mels = self.mel_GAN(x)
+        
+        mels = self.mel_GAN(x) # Log mel spectrogram
+        
         if self.nf_level:
-            n = torch.randn(mels.size()).to(self.device)
-            if self.informed_smoothing:
+            
+            n = torch.randn(mels.size()).to(self.device) # Noise matrix
+            
+            if self.informed_smoothing: # Shaping
                 n = n * self.smoothing_curve
             
-            ## Fame-based normalization ##
+            # Fame-based normalization
             noise_frame_energy = torch.norm(n, 2, dim=1).squeeze() # Compute energy of each frame
             mels_frame_energy = torch.norm(mels, 2, dim=1).squeeze() # Compute energy of each frame
             n = n * mels_frame_energy/noise_frame_energy # Normalize
-            ##  ##  ##  ##  ##  ##  ##  ##
             
             mels = mels + self.nf_level * n
 
-        x = self.mel_GAN.inverse(mels)
+        x = self.mel_GAN.inverse(mels) # Inversion
+
         x = torchaudio.functional.resample(x, 22000, 16000)
         
         return x, y
