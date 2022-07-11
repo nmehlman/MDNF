@@ -37,7 +37,7 @@
     },
     "defense": {
         "kwargs": {
-            "nf_level": 0.01
+            "nf_level": 0.1
         },
         "module": "mdnf.MDNF_preprocessor",
         "name": "MDNF_Torch",
