@@ -1,5 +1,5 @@
 {
-    "_description": "Targeted PGD 20 dB 500 its, MG-MDNF 20",
+    "_description": "Targeted PGD 20 dB 500 its, MG-MDNF 0.05",
     "adhoc": {
         "skip_adversarial": false
     },
@@ -37,7 +37,7 @@
     },
     "defense": {
         "kwargs": {
-            "nf_level": 0.1
+            "nf_level": 0.05
         },
         "module": "mdnf.MDNF_preprocessor",
         "name": "MDNF_Torch",
