@@ -55,17 +55,34 @@ class MDNF_Torch(PreprocessorPyTorch):
         mg_weights_file = 'melGAN.pt',
         nf_level = 0,
         nf_curve_file = 'smoothing_curve',
+        apply_pca = False,
+        pca_comps = 80,
         apply_fit: bool = False,
         apply_predict: bool = True,
     ) -> None:
 
-        """Create an instance of the MDNf Defense"""
+        """Create an instance of the MDNF preprocessor
+        :param mg_weights_file: name of file containing melGAN model weights. 
+        Should be located in 'weights' directory of the submission repo.
+        :param nf_level: noise-flooding amplitude.
+        :param nf_curve_file: name of file containing 'informed'smoothing curve. 
+        Should be located in 'weights' directory of the submission repo.
+        :param apply_pca: flag to apply PCA projection to noise-flooded mel vector.
+        :param pca_comps: number of PCA components to use (between 1 and 80).
+        :param apply_fit: apply fitting to preprocessor
+        :param apply_predict: apply predict to preprocessor
+        """
 
         super().__init__(is_fitted=True, apply_fit=apply_fit, apply_predict=apply_predict)
         
         cuda_idx = torch.cuda.current_device()                                       
         self._device = torch.device("cuda:{}".format(cuda_idx)) 
 
+        ## PCA config
+        self.apply_pca = apply_pca
+        self.pca_comps = pca_comps
+
+        ## NF config
         self.nf_level = nf_level
         self.informed_smoothing = bool(nf_curve_file)
         if nf_curve_file:
@@ -76,6 +93,7 @@ class MDNF_Torch(PreprocessorPyTorch):
                 print("Smoothing curve file not found. Ensure that the file is located in the 'mdnf/weights' directory")
                 sys.exit(1)
 
+        ## MelGAN setup
         mg_weights_path = os.path.join(LOCAL_WEIGHTS_DIR, mg_weights_file)
         try:
             self.mel_GAN = MelVocoder(path=mg_weights_path, device=self.device)
@@ -89,6 +107,16 @@ class MDNF_Torch(PreprocessorPyTorch):
         
         mels = self.mel_GAN(x) # Log mel spectrogram
         
+        if self.apply_pca: # Compute PCA projection matrix
+
+            m_mels = torch.mean( mels, 2, keepdim=True ) # Centering
+            mels = mels - m_mels
+
+            U, _, _ = torch.svd(mels, compute_uv=True)
+            U = U[ :, :self.pca_comps ]
+
+            Proj_Mtx = torch.matmul( torch.transpose(U,1,2),U ) # PCA projection matrix
+
         if self.nf_level:
             
             n = torch.randn(mels.size()).to(self.device) # Noise matrix
@@ -102,6 +130,10 @@ class MDNF_Torch(PreprocessorPyTorch):
             n = n * mels_frame_energy/noise_frame_energy # Normalize
             
             mels = mels + self.nf_level * n
+
+        if self.apply_pca: # Project onto PCA subspace
+            mels = torch.matmul( Proj_Mtx, mels)
+            mels = mels + m_mels # Add back mean
 
         x = self.mel_GAN.inverse(mels) # Inversion
 
