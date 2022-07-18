@@ -18,7 +18,7 @@ with ExternalRepoImport(
 
 
 def get_deepspeech_model(
-    model_kwargs: dict, wrapper_kwargs: dict, weights_path: Optional[str] = None
+    model_kwargs: dict = {}, wrapper_kwargs: dict = {}, weights_path: Optional[str] = None
 ) -> PyTorchDeepSpeech:
 
     return PyTorchDeepSpeech(**wrapper_kwargs)
