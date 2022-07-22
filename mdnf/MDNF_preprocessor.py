@@ -108,8 +108,10 @@ class MDNF_Torch(PreprocessorPyTorch):
     def forward(self, x: "torch.Tensor", y: Optional["torch.Tensor"] = None) -> Tuple["torch.Tensor", Optional["torch.Tensor"]]:
 
         x = torchaudio.functional.resample(x, 16000, 22000)
-        
         pdb.set_trace()
+        if x.ndim == 1:
+            x = x.unsqueeze(0)
+        
         mels = self.mel_GAN(x) # Log mel spectrogram
         
         if self.apply_pca: # Compute PCA projection matrix
