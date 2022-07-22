@@ -109,6 +109,7 @@ class MDNF_Torch(PreprocessorPyTorch):
 
         x = torchaudio.functional.resample(x, 16000, 22000)
         
+        pdb.set_trace()
         mels = self.mel_GAN(x) # Log mel spectrogram
         
         if self.apply_pca: # Compute PCA projection matrix
