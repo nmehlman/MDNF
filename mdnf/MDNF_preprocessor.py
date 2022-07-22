@@ -108,8 +108,9 @@ class MDNF_Torch(PreprocessorPyTorch):
     def forward(self, x: "torch.Tensor", y: Optional["torch.Tensor"] = None) -> Tuple["torch.Tensor", Optional["torch.Tensor"]]:
 
         x = torchaudio.functional.resample(x, 16000, 22000)
-        pdb.set_trace()
-        if x.ndim == 1:
+
+        ndim = x.ndim # Check shape
+        if ndim == 1:
             x = x.unsqueeze(0)
         
         mels = self.mel_GAN(x) # Log mel spectrogram
@@ -143,6 +144,9 @@ class MDNF_Torch(PreprocessorPyTorch):
             mels = mels + m_mels # Add back mean
 
         x = self.mel_GAN.inverse(mels) # Inversion
+
+        if ndim == 1: # Revert shape if needed
+            x = x.squeeze()
 
         x = torchaudio.functional.resample(x, 22000, 16000)
         
