@@ -145,10 +145,6 @@ class MDNF_Torch(PreprocessorPyTorch):
 
         x = self.mel_GAN.inverse(mels) # Inversion
 
-        pdb.set_trace()
-        if ndim == 1: # Revert shape if needed
-            x = x.squeeze()
-
         x = torchaudio.functional.resample(x, 22000, 16000)
         
         return x, y
