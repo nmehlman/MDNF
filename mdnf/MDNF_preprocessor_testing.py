@@ -135,7 +135,7 @@ class MDNF_Torch(PreprocessorPyTorch):
             # Fame-based normalization
             noise_frame_energy = torch.norm(n, 2, dim=1).squeeze() # Compute energy of each frame
             mels_frame_energy = torch.norm(mels, 2, dim=1).squeeze() # Compute energy of each frame
-            n = self.nf_level * n * mels_frame_energy/noise_frame_energy # Normalize
+            n =  n * mels_frame_energy/noise_frame_energy # Normalize
             
             #mels = mels + self.nf_level * n
 
@@ -146,7 +146,7 @@ class MDNF_Torch(PreprocessorPyTorch):
         x_m = self.mel_GAN.inverse(mels) # Inversion
         x_n = self.mel_GAN.inverse(n)
 
-        x = x_n + x_m
+        x = x_m + self.nf_level * x_n
 
         x = torchaudio.functional.resample(x, 22000, 16000)
         
