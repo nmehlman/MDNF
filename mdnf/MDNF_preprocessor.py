@@ -59,6 +59,7 @@ class MDNF_Torch(PreprocessorPyTorch):
         pca_comps = 80,
         apply_fit: bool = False,
         apply_predict: bool = True,
+        channels_first: bool = True
     ) -> None:
 
         """Create an instance of the MDNF preprocessor
@@ -71,6 +72,7 @@ class MDNF_Torch(PreprocessorPyTorch):
         :param pca_comps: number of PCA components to use (between 1 and 80).
         :param apply_fit: apply fitting to preprocessor
         :param apply_predict: apply predict to preprocessor
+        :param channels_first: for backwards compatibility
         """
 
         super().__init__(is_fitted=True, apply_fit=apply_fit, apply_predict=apply_predict)

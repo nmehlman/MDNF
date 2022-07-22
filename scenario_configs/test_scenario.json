@@ -1,5 +1,5 @@
 {
-    "_description": "Baseline DeepSpeech ASR on LibriSpeech, contributed by MITRE Corporation",
+    "_description": "Test Scenario",
     "adhoc": {
         "skip_adversarial": false
     },
