@@ -134,7 +134,7 @@ class MDNF_Torch(PreprocessorPyTorch):
             
             # Fame-based normalization
             noise_frame_energy = torch.norm(n, 2, dim=1).squeeze() # Compute energy of each frame
-            mels_frame_energy = torch.norm(mels, 2, dim=1).squeeze() # Compute energy of each frame
+            mels_frame_energy = torch.norm(mels, 2, dim=1).squeeze()
             n = n * mels_frame_energy/noise_frame_energy # Normalize
             
             mels = mels + self.nf_level * n
